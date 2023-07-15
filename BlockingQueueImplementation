@@ -1,0 +1,59 @@
+package com.blocking;
+
+import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class BlockingQueueImplementation {
+
+	private static BlockingQueue<Integer> blockingQueue=new ArrayBlockingQueue<>(10);
+	
+	public static void main (String [] args) {
+		Thread producer=new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					producer();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		Thread consumer=new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					consumer();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			});
+		
+		
+			producer.start();
+			consumer.start();
+		}
+	public static void  producer() throws InterruptedException {
+		Random random=new Random();
+		while(true) {
+			Thread.sleep(2000);
+		int produced=random.nextInt(100);
+		blockingQueue.put(produced);
+		System.out.println("Produced:"+produced);
+		}
+	}
+	public static void  consumer() throws InterruptedException {
+		while(true) {
+			Thread.sleep(2000);
+			int consumed=blockingQueue.take();
+			System.out.println("Consumed:"+consumed);
+		}
+	}
+}
